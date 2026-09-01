@@ -2,343 +2,190 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>A Prova Médica da Cruz</title>
 <style>
   :root{
     --bg:#0b0908;
-    --bg2:#171210;
-    --card:#1c1613;
-    --ink:#f3ece2;
-    --sub:#b9a99450;
-    --sub2:#a6968720;
-    --line:#3a2e26;
     --gold:#d8ab5c;
     --gold-glow:rgba(216,171,92,.55);
-    --blood:#a3273a;
-    --blood-glow:rgba(163,39,58,.6);
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
   body{
     margin:0; padding:0;
-    background:
-      radial-gradient(ellipse 900px 500px at 50% 0%, rgba(216,171,92,.10), transparent 65%),
-      var(--bg);
-    color:var(--ink);
+    background:var(--bg);
+    color:#e9decb;
     font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing:antialiased;
-    min-height:100vh;
+    overscroll-behavior-y:none;
   }
-
-  header{
-    text-align:center;
-    padding:34px 20px 18px;
-  }
-  header h1{
-    margin:0;
-    font-size:clamp(22px,6vw,30px);
-    font-weight:800;
-    letter-spacing:.01em;
-    color:var(--ink);
-  }
-  header .sub{
-    margin-top:8px;
-    font-size:13.5px;
-    color:#c9bda9;
-    line-height:1.5;
-    max-width:420px;
-    margin-left:auto; margin-right:auto;
-  }
-  header .hint{
-    margin-top:14px;
-    font-size:12px;
-    color:var(--gold);
-    letter-spacing:.03em;
-  }
-  header .hint::before{ content:"✦ "; }
 
   .stage{
     position:relative;
-    max-width:460px;
-    margin:10px auto 50px;
-    padding:0 20px;
-  }
-  .stage-inner{
-    position:relative;
-    border-radius:22px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.55), 0 0 0 1px var(--line);
-  }
-  .stage-inner img{
-    display:block;
     width:100%;
-    height:auto;
+    height:100dvh;
+    overflow:hidden;
+  }
+  .stage img{
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center;
   }
 
   .dot{
     position:absolute;
     transform:translate(-50%,-50%);
     top:var(--top); left:var(--left);
-    width:30px; height:30px;
+    width:36px; height:36px;
     border:none; padding:0; cursor:pointer;
     background:none;
+    z-index:5;
+  }
+  .dot .float{
+    position:relative;
+    display:block;
+    width:100%; height:100%;
+    animation:var(--dance) var(--dance-dur,6s) ease-in-out infinite;
+    animation-delay:var(--dance-delay,0s);
   }
   .dot .ring{
-    position:absolute; inset:0;
+    position:absolute; inset:-4px;
     border-radius:50%;
     background:radial-gradient(circle, var(--gold-glow), transparent 70%);
-    animation:pulseRing 2.2s ease-out infinite;
+    animation:pulseRing 2.4s ease-out infinite;
+    animation-delay:var(--dance-delay,0s);
   }
   .dot .core{
     position:absolute;
     top:50%; left:50%; transform:translate(-50%,-50%);
-    width:14px; height:14px;
+    width:30px; height:30px;
     border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 60%, #a5793a);
+    background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 55%, #9c7038);
     box-shadow:0 0 10px 2px var(--gold-glow), 0 0 0 2px rgba(0,0,0,.35);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:14px; color:#3a2410;
   }
   @keyframes pulseRing{
-    0%{ transform:scale(.5); opacity:.9; }
-    75%{ transform:scale(2.1); opacity:0; }
-    100%{ transform:scale(2.1); opacity:0; }
+    0%{ transform:scale(.55); opacity:.85; }
+    75%{ transform:scale(1.9); opacity:0; }
+    100%{ transform:scale(1.9); opacity:0; }
   }
-  .dot:active .core{ transform:translate(-50%,-50%) scale(.85); }
+  @keyframes danceA{0%{transform:translate(0,0)}25%{transform:translate(5px,-6px)}50%{transform:translate(-3px,4px)}75%{transform:translate(-6px,-3px)}100%{transform:translate(0,0)}}
+  @keyframes danceB{0%{transform:translate(0,0)}30%{transform:translate(-6px,-4px)}55%{transform:translate(4px,5px)}80%{transform:translate(3px,-6px)}100%{transform:translate(0,0)}}
+  @keyframes danceC{0%{transform:translate(0,0)}20%{transform:translate(4px,6px)}50%{transform:translate(-6px,-2px)}75%{transform:translate(2px,-6px)}100%{transform:translate(0,0)}}
 
-  /* posições calibradas via Playwright + screenshot em 01/09/2026 */
-  #p-rosto{ --top:26%; --left:47%; }
-  #p-ombros{ --top:22%; --left:67%; }
-  #p-punhos{ --top:24%; --left:89%; }
-  #p-costas{ --top:34%; --left:21%; }
-  #p-peito{ --top:35%; --left:48%; }
-  #p-lancada{ --top:40%; --left:60%; }
-  #p-circulacao{ --top:45%; --left:36%; }
-  #p-pernas{ --top:62%; --left:46%; }
-  #p-pes{ --top:83%; --left:47%; }
+  #p-rosto{ --top:26%; --left:47%; --dance:danceA; --dance-dur:6.2s; --dance-delay:.1s; }
+  #p-costas{ --top:34%; --left:21%; --dance:danceB; --dance-dur:5.6s; --dance-delay:.9s; }
+  #p-circulacao{ --top:45%; --left:36%; --dance:danceC; --dance-dur:6.8s; --dance-delay:.3s; }
+  #p-punhos{ --top:24%; --left:89%; --dance:danceA; --dance-dur:5.9s; --dance-delay:1.4s; }
+  #p-ombros{ --top:22%; --left:67%; --dance:danceB; --dance-dur:6.4s; --dance-delay:.6s; }
+  #p-peito{ --top:35%; --left:48%; --dance:danceC; --dance-dur:5.7s; --dance-delay:1.8s; }
+  #p-lancada{ --top:40%; --left:60%; --dance:danceA; --dance-dur:6.6s; --dance-delay:2.1s; }
+  #p-pernas{ --top:62%; --left:46%; --dance:danceB; --dance-dur:6.1s; --dance-delay:1.1s; }
+  #p-pes{ --top:83%; --left:47%; --dance:danceC; --dance-dur:5.8s; --dance-delay:.4s; }
 
   @media(prefers-reduced-motion:reduce){
+    .dot .float{ animation:none; }
     .dot .ring{ animation:none; opacity:.5; }
   }
 
-  /* modal */
-  .overlay{
-    position:fixed; inset:0;
-    background:rgba(6,4,3,.86);
-    backdrop-filter:blur(3px);
-    display:flex; align-items:flex-end; justify-content:center;
-    z-index:50;
-    opacity:0; pointer-events:none;
-    transition:opacity .25s ease;
+  .below-fold{
+    padding:22px 20px 44px;
+    text-align:center;
   }
-  .overlay.show{ opacity:1; pointer-events:auto; }
-  .sheet{
-    width:100%; max-width:520px;
-    max-height:88vh;
-    overflow-y:auto;
-    background:linear-gradient(180deg, var(--card), var(--bg2));
-    border-radius:22px 22px 0 0;
-    border-top:1px solid var(--line);
-    box-shadow:0 -20px 60px rgba(0,0,0,.6);
-    transform:translateY(24px);
-    transition:transform .3s cubic-bezier(.2,.8,.2,1);
-    padding-bottom:env(safe-area-inset-bottom, 0);
+  .aviso{
+    display:inline-block;
+    font-size:11px;
+    color:var(--gold);
+    border:1px solid rgba(216,171,92,.35);
+    background:rgba(216,171,92,.07);
+    border-radius:999px;
+    padding:6px 14px;
+    margin-bottom:14px;
   }
-  .overlay.show .sheet{ transform:translateY(0); }
-  @media(min-width:560px){
-    .overlay{ align-items:center; }
-    .sheet{ border-radius:22px; max-height:82vh; }
+  .referencias{
+    font-size:10.5px;
+    color:#7a6c5c;
+    line-height:1.7;
+    max-width:340px;
+    margin:0 auto;
   }
 
-  .sheet-close{
-    position:sticky; top:0; z-index:2;
-    display:flex; justify-content:flex-end;
-    padding:14px 14px 0;
-    background:linear-gradient(180deg, var(--card) 60%, transparent);
+  /* visor de imagem */
+  .viewer{
+    position:fixed; inset:0;
+    z-index:50;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(6,4,3,0);
+    opacity:0; pointer-events:none;
+    transition:background .4s ease, opacity .4s ease;
   }
-  .sheet-close button{
-    width:34px; height:34px; border-radius:50%;
-    border:1px solid var(--line);
-    background:rgba(0,0,0,.35);
-    color:var(--ink);
+  .viewer.show{ opacity:1; pointer-events:auto; background:rgba(6,4,3,.95); }
+  .viewer-zoom{
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    transform:scale(.04);
+    opacity:0;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+  }
+  .viewer-zoom img{
+    max-width:100%; max-height:100%;
+    touch-action:none;
+    will-change:transform;
+    transform:translate(0,0) scale(1);
+  }
+  .viewer-close{
+    position:fixed; top:max(14px, env(safe-area-inset-top));
+    right:14px; z-index:51;
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(216,171,92,.4);
+    background:rgba(0,0,0,.5);
+    color:#e9decb;
     font-size:18px; line-height:1;
     cursor:pointer;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
   }
-  .sheet-img{
-    width:100%; display:block;
-    margin-top:-30px;
-  }
-  .sheet-body{ padding:6px 24px 28px; }
-  .sheet-eyebrow{
-    font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--gold);
-  }
-  .sheet-body h2{
-    margin:6px 0 14px;
-    font-size:21px; font-weight:800;
-    color:var(--ink);
-    line-height:1.25;
-  }
-  .sheet-body p{
-    font-size:14.5px; line-height:1.65;
-    color:#dcd2c3;
-    margin:0 0 14px;
-  }
-  .sheet-body blockquote{
-    margin:0 0 16px;
-    padding:12px 16px;
-    border-left:3px solid var(--blood);
-    background:rgba(163,39,58,.08);
-    border-radius:0 10px 10px 0;
-    font-style:italic;
-    font-size:14px;
-    color:#f0e2d6;
-    line-height:1.6;
-  }
-
-  footer{
-    text-align:center;
-    padding:0 20px 40px;
-    font-size:11.5px;
-    color:#7a6c5c;
-    line-height:1.6;
-  }
+  .viewer.show ~ .viewer-close,
+  .viewer.show .viewer-close{ opacity:1; pointer-events:auto; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>A Prova Médica da Cruz</h1>
-  <p class="sub">A morte de Jesus, ponto por ponto, com os olhos da medicina.</p>
-  <p class="hint">toque nos pontos dourados no corpo</p>
-</header>
-
 <div class="stage">
-  <div class="stage-inner">
-    <img src="imagens/hero-crucificacao.jpg" alt="Representação da crucificação">
-    <div id="dots"></div>
+  <img src="imagens/hero-crucificacao.jpg" alt="Jesus crucificado">
+  <div id="dots"></div>
+</div>
+
+<div class="below-fold">
+  <div class="aviso">⚠ Recriação médica realista — conteúdo educacional e devocional</div>
+  <div class="referencias">
+    Baseado em Pierre Barbet, "Em Defesa de Cristo" (Lee Strobel) e no artigo do JAMA (1986) sobre a fisiologia da crucificação romana.
   </div>
 </div>
 
-<footer>
-  Baseado em Pierre Barbet, "Em Defesa de Cristo" (Lee Strobel) e no artigo<br>
-  do JAMA (1986) sobre a fisiologia da crucificação romana.
-</footer>
-
-<div class="overlay" id="overlay">
-  <div class="sheet">
-    <div class="sheet-close"><button id="closeBtn" aria-label="Fechar">✕</button></div>
-    <img class="sheet-img" id="sheetImg" src="" alt="">
-    <div class="sheet-body">
-      <div class="sheet-eyebrow" id="sheetEyebrow"></div>
-      <h2 id="sheetTitle"></h2>
-      <div id="sheetText"></div>
-    </div>
+<div class="viewer" id="viewer">
+  <button class="viewer-close" id="viewerClose" aria-label="Fechar">✕</button>
+  <div class="viewer-zoom" id="viewerZoom">
+    <img id="viewerImg" src="" alt="">
   </div>
 </div>
 
 <script>
+// ordem = sequência do documento-base da pregação
 const pontos = [
-  {
-    id: "p-rosto",
-    img: "imagens/rosto-hematidrose.jpg",
-    eyebrow: "Getsêmani",
-    title: "O suor que virou sangue",
-    html: `
-      <blockquote>"Jesus entrou em agonia no Getsêmani e seu suor tornou-se como gotas de sangue a escorrer pela terra."</blockquote>
-      <p>O nome técnico é <strong>hematidrose</strong>: um fenômeno raríssimo, que só acontece sob um abatimento moral violento — um terror imenso. A tensão extrema rompe as finíssimas veias capilares sob a pele, e o sangue se mistura ao suor.</p>
-      <p>Na prática: a pele inteira de Jesus já estava fragilizada, cheia de microlesões invisíveis, <strong>antes mesmo do primeiro golpe do açoite</strong>. Ele não começa a via-crucis saudável — começa dilacerado por dentro.</p>
-    `
-  },
-  {
-    id: "p-costas",
-    img: "imagens/acoite-costas.jpg",
-    eyebrow: "A flagelação romana",
-    title: "O chicote que já encontra ferida aberta",
-    html: `
-      <blockquote>"Golpeiam com chibatadas a pele já alterada por milhões de microscópicas hemorragias do suor de sangue. A pele se dilacera e se rompe, o sangue espirra a cada golpe."</blockquote>
-      <p>O instrumento era o <strong>flagrum</strong> romano: tiras de couro com pedaços de metal ou osso afiado, feito pra rasgar, não só machucar. Registros do período descrevem vítimas com veias, músculos e até órgãos internos expostos — havia condenado que morria só nessa fase.</p>
-      <p>Tradicionalmente eram 39 golpes. O resultado: perda de sangue maciça, muito antes de a cruz sequer entrar em cena.</p>
-    `
-  },
-  {
-    id: "p-ombros",
-    img: "imagens/ombros.jpg",
-    eyebrow: "Suspenso na cruz",
-    title: "Ombros arrancados do lugar",
-    html: `
-      <p>No instante em que o corpo é erguido, o peso total passa a puxar os braços pra cima e pros lados. Os ombros se deslocam quase imediatamente — as juntas se distendem cerca de <strong>15 centímetros</strong> além do normal.</p>
-      <blockquote>"Todos os meus ossos estão desconjuntados." — Salmo 22, escrito quase mil anos antes de a crucificação existir como método de execução.</blockquote>
-      <p>Não é só dor a mais. É o cumprimento literal de uma profecia impossível de forjar depois dos fatos.</p>
-    `
-  },
-  {
-    id: "p-punhos",
-    img: "imagens/punhos.jpg",
-    eyebrow: "Os pregos",
-    title: "Onde nasceu a palavra \"excruciante\"",
-    html: `
-      <p>Por que o pulso, e não a palma da mão? A palma sozinha é só tecido mole — rasgaria com o peso do corpo pendurado. O pulso tem estrutura óssea pra sustentar. E é exatamente ali que passa o <strong>nervo mediano</strong>, o maior nervo da mão.</p>
-      <blockquote>"O nervo mediano foi lesado. Uma dor lancinante, agudíssima, difundiu-se pelos dedos, espalhou-se pelos ombros, atingindo o cérebro. A dor mais insuportável que um homem pode provar."</blockquote>
-      <p>O nervo não é destruído por completo — fica em contato com o prego, e a cada movimento na cruz, <strong>vibra</strong> como uma corda esticada. É desse sofrimento específico que nasceu a palavra "excruciante": do latim <em>excruciatus</em>, "vindo da cruz".</p>
-    `
-  },
-  {
-    id: "p-peito",
-    img: "imagens/asfixia-tetania-toracica.jpg",
-    eyebrow: "O mecanismo da morte",
-    title: "Preso na hora de respirar",
-    html: `
-      <blockquote>"Os braços esticados e levantados, os dedos se curvando — isto é o que os médicos chamam de tetania."</blockquote>
-      <p>A tetania é uma contração muscular involuntária que avança em ondas: abdômen, costelas, pescoço, e por fim os músculos respiratórios. Pendurado pelos braços, o peso do corpo deixa o peito preso na posição de <strong>inspirar</strong> — o ar entra, mas não consegue mais sair.</p>
-      <p>A única saída é mecânica: empurrar o corpo pra cima, apoiado no prego do pé, só pra conseguir esvaziar os pulmões. E repetir. De novo. Por horas.</p>
-    `
-  },
-  {
-    id: "p-circulacao",
-    img: "imagens/choque-hipovolemico.jpg",
-    eyebrow: "Choque hipovolêmico",
-    title: "O corpo começando a desligar",
-    html: `
-      <p>Depois do Getsêmani, do açoite e da coroa de espinhos, Jesus já havia perdido uma quantidade de sangue que nenhum corpo humano suporta sem consequência. Quatro efeitos se instalam ao mesmo tempo:</p>
-      <p>1. O coração bate mais rápido e mais fraco, sem volume pra bombear.<br>
-      2. A pressão arterial despenca — tontura, quase-desmaio.<br>
-      3. Os rins começam a falhar, tentando preservar líquido.<br>
-      4. Uma sede insuportável.</p>
-      <p>É esse choque, e não simples cansaço, que explica por que Jesus não conseguiu carregar sozinho a cruz — e a frase seca: "tenho sede."</p>
-    `
-  },
-  {
-    id: "p-lancada",
-    img: "imagens/lancada-efusao-pericardica.jpg",
-    eyebrow: "A confirmação que ninguém esperava",
-    title: "Sangue e água",
-    html: `
-      <p>O choque hipovolêmico já vinha levando o coração à falência — o que provoca acúmulo de líquido ao redor do coração e dos pulmões. Quando a lança do soldado atinge o tórax, sai primeiro um líquido claro, e só depois, sangue de verdade.</p>
-      <blockquote>"E logo saiu sangue e água." — João 19:34</blockquote>
-      <p>João não tinha formação médica — só registrou o que viu. Dezenove séculos depois, a medicina confirma que é exatamente esse o padrão de um corpo já morto, em falência cardíaca terminal. Em 1986, o JAMA publicou: "o peso das evidências históricas e médicas indica que Jesus estava morto antes do ferimento no lado."</p>
-    `
-  },
-  {
-    id: "p-pernas",
-    img: "imagens/pernas.jpg",
-    eyebrow: "Pernas não quebradas",
-    title: "A profecia nos ossos",
-    html: `
-      <p>Era prática romana comum quebrar as pernas dos crucificados pra acelerar a morte — sem apoio dos pés, a vítima não consegue mais se erguer pra respirar, e morre em minutos. Foi o que fizeram com os dois ladrões ao lado de Jesus.</p>
-      <p>Com ele, não. Os soldados chegaram, verificaram, e constataram que já estava morto — a lançada só confirmou o óbvio. Cumpre-se, sem que ninguém tivesse planejado, outra profecia: <strong>nenhum de seus ossos seria quebrado</strong>.</p>
-    `
-  },
-  {
-    id: "p-pes",
-    img: "imagens/pes.jpg",
-    eyebrow: "Achado arqueológico — Jerusalém, 1968",
-    title: "O prego que a arqueologia encontrou",
-    html: `
-      <p>O relato médico diz que o prego era cravado no calcâneo (osso do calcanhar) e entre os ossos do tornozelo, pra sustentar o peso do corpo. Por décadas, parte da academia questionou se os romanos realmente usavam pregos, ou apenas cordas.</p>
-      <blockquote>Em 1968, arqueólogos encontraram em Jerusalém o esqueleto de Yohanan, um judeu crucificado por volta do ano 70 d.C. — ainda preso ao osso do calcanhar, um prego de 17 centímetros, dobrado na ponta.</blockquote>
-      <p>A resposta ao debate acadêmico estava literalmente cravada no osso.</p>
-    `
-  },
+  { id:"p-rosto",       num:1, img:"imagens/rosto-hematidrose.jpg",         alt:"Hematidrose — Getsêmani" },
+  { id:"p-costas",      num:2, img:"imagens/acoite-costas.jpg",             alt:"Açoite romano" },
+  { id:"p-circulacao",  num:3, img:"imagens/choque-hipovolemico.jpg",       alt:"Choque hipovolêmico" },
+  { id:"p-punhos",      num:4, img:"imagens/punhos.jpg",                    alt:"Os pregos e o nervo mediano" },
+  { id:"p-ombros",      num:5, img:"imagens/ombros.jpg",                    alt:"Ombros deslocados" },
+  { id:"p-peito",       num:6, img:"imagens/asfixia-tetania-toracica.jpg",  alt:"Tetania e asfixia" },
+  { id:"p-lancada",     num:7, img:"imagens/lancada-efusao-pericardica.jpg",alt:"A lançada" },
+  { id:"p-pernas",      num:8, img:"imagens/pernas.jpg",                    alt:"Pernas não quebradas" },
+  { id:"p-pes",         num:9, img:"imagens/pes.jpg",                       alt:"Achado arqueológico" },
 ];
 
 const stage = document.getElementById("dots");
@@ -346,33 +193,91 @@ pontos.forEach(p => {
   const btn = document.createElement("button");
   btn.className = "dot";
   btn.id = p.id;
-  btn.innerHTML = `<span class="ring"></span><span class="core"></span>`;
-  btn.addEventListener("click", () => abrir(p));
+  btn.setAttribute("aria-label", p.alt);
+  btn.innerHTML = `<span class="float"><span class="ring"></span><span class="core">${p.num}</span></span>`;
+  btn.addEventListener("click", (e) => abrir(p, e));
   stage.appendChild(btn);
 });
 
-const overlay = document.getElementById("overlay");
-const sheetImg = document.getElementById("sheetImg");
-const sheetEyebrow = document.getElementById("sheetEyebrow");
-const sheetTitle = document.getElementById("sheetTitle");
-const sheetText = document.getElementById("sheetText");
+const viewer = document.getElementById("viewer");
+const viewerZoom = document.getElementById("viewerZoom");
+const viewerImg = document.getElementById("viewerImg");
+const viewerClose = document.getElementById("viewerClose");
 
-function abrir(p){
-  sheetImg.src = p.img;
-  sheetImg.alt = p.title;
-  sheetEyebrow.textContent = p.eyebrow;
-  sheetTitle.textContent = p.title;
-  sheetText.innerHTML = p.html;
-  overlay.classList.add("show");
+function abrir(p, ev){
+  const rect = ev.currentTarget.getBoundingClientRect();
+  const ox = rect.left + rect.width/2 + "px";
+  const oy = rect.top + rect.height/2 + "px";
+  viewerImg.src = p.img;
+  viewerImg.alt = p.alt;
+  resetZoomImg();
+  viewerZoom.style.transformOrigin = ox + " " + oy;
+  viewerZoom.style.transform = "scale(.04)";
+  viewerZoom.style.opacity = "0";
+  viewer.classList.add("show");
   document.body.style.overflow = "hidden";
+  void viewerZoom.offsetWidth; // força reflow
+  requestAnimationFrame(() => {
+    viewerZoom.style.transform = "scale(1)";
+    viewerZoom.style.opacity = "1";
+  });
 }
 function fechar(){
-  overlay.classList.remove("show");
+  viewerZoom.style.transform = "scale(.04)";
+  viewerZoom.style.opacity = "0";
+  viewer.classList.remove("show");
   document.body.style.overflow = "";
 }
-document.getElementById("closeBtn").addEventListener("click", fechar);
-overlay.addEventListener("click", e => { if(e.target === overlay) fechar(); });
+viewerClose.addEventListener("click", fechar);
+viewer.addEventListener("click", e => { if(e.target === viewer) fechar(); });
 document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
+
+// pinça pra dar zoom + arrastar quando ampliado + duplo toque reseta
+let scale = 1, panX = 0, panY = 0;
+let startDist = 0, startScale = 1, startPanX = 0, startPanY = 0, startTouchX = 0, startTouchY = 0;
+let lastTap = 0;
+
+function applyImgTransform(){
+  viewerImg.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+}
+function resetZoomImg(){
+  scale = 1; panX = 0; panY = 0;
+  applyImgTransform();
+}
+function dist(a, b){ return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY); }
+
+viewerImg.addEventListener("touchstart", e => {
+  if(e.touches.length === 2){
+    startDist = dist(e.touches[0], e.touches[1]);
+    startScale = scale;
+  } else if(e.touches.length === 1 && scale > 1){
+    startTouchX = e.touches[0].clientX - panX;
+    startTouchY = e.touches[0].clientY - panY;
+  }
+}, { passive:true });
+
+viewerImg.addEventListener("touchmove", e => {
+  if(e.touches.length === 2){
+    e.preventDefault();
+    const d = dist(e.touches[0], e.touches[1]);
+    scale = Math.min(5, Math.max(1, startScale * (d / startDist)));
+    applyImgTransform();
+  } else if(e.touches.length === 1 && scale > 1){
+    e.preventDefault();
+    panX = e.touches[0].clientX - startTouchX;
+    panY = e.touches[0].clientY - startTouchY;
+    applyImgTransform();
+  }
+}, { passive:false });
+
+viewerImg.addEventListener("touchend", e => {
+  if(e.touches.length === 0){
+    if(scale <= 1) resetZoomImg();
+    const now = Date.now();
+    if(now - lastTap < 300) resetZoomImg();
+    lastTap = now;
+  }
+});
 </script>
 
 </body>
