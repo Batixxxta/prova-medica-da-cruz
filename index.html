@@ -102,7 +102,9 @@
 
   #p-rosto{ --top:24%; --left:49%; --dance:danceA; --dance-dur:5.2s; --dance-delay:.1s; }
   #p-costas{ --top:32%; --left:34%; --dance:danceB; --dance-dur:4.7s; --dance-delay:.9s; }
+  #p-coroa{ --top:17%; --left:43%; --dance:danceC; --dance-dur:5.3s; --dance-delay:2.4s; }
   #p-circulacao{ --top:34%; --left:44%; --dance:danceC; --dance-dur:5.6s; --dance-delay:.3s; }
+  #p-caminho{ --top:23%; --left:22%; --dance:danceA; --dance-dur:5.9s; --dance-delay:2.7s; }
   #p-punhos{ --top:23%; --left:90%; --dance:danceA; --dance-dur:4.9s; --dance-delay:1.4s; }
   #p-ombros{ --top:26%; --left:77%; --dance:danceB; --dance-dur:5.4s; --dance-delay:.6s; }
   #p-peito{ --top:31%; --left:50%; --dance:danceC; --dance-dur:4.8s; --dance-delay:1.8s; }
@@ -265,15 +267,17 @@
 <script>
 // ordem = sequência do documento-base da pregação
 const pontos = [
-  { id:"p-rosto",       num:1, img:"imagens/rosto-hematidrose.jpg",         alt:"Hematidrose — Getsêmani" },
-  { id:"p-costas",      num:2, img:"imagens/acoite-costas.jpg",             alt:"Açoite romano" },
-  { id:"p-circulacao",  num:3, img:"imagens/choque-hipovolemico.jpg",       alt:"Choque hipovolêmico" },
-  { id:"p-punhos",      num:4, img:"imagens/punhos.jpg",                    alt:"Os pregos e o nervo mediano" },
-  { id:"p-ombros",      num:5, img:"imagens/ombros.jpg",                    alt:"Ombros deslocados" },
-  { id:"p-peito",       num:6, img:"imagens/asfixia-tetania-toracica.jpg",  alt:"Tetania e asfixia" },
-  { id:"p-lancada",     num:7, img:"imagens/lancada-efusao-pericardica.jpg",alt:"A lançada" },
-  { id:"p-pernas",      num:8, img:"imagens/pernas.jpg",                    alt:"Pernas não quebradas" },
-  { id:"p-pes",         num:9, img:"imagens/pes.jpg",                       alt:"Achado arqueológico" },
+  { id:"p-rosto",       num:1,  img:"imagens/rosto-hematidrose.jpg",         alt:"Hematidrose — Getsêmani" },
+  { id:"p-costas",      num:2,  img:"imagens/acoite-costas.jpg",             alt:"Açoite romano" },
+  { id:"p-coroa",       num:3,  img:"imagens/coroa-espinhos.jpg",            alt:"A coroa de espinhos" },
+  { id:"p-circulacao",  num:4,  img:"imagens/choque-hipovolemico.jpg",       alt:"Choque hipovolêmico" },
+  { id:"p-caminho",     num:5,  img:"imagens/caminho-calvario.jpg",          alt:"O caminho até o Calvário" },
+  { id:"p-punhos",      num:6,  img:"imagens/punhos.jpg",                    alt:"Os pregos e o nervo mediano" },
+  { id:"p-ombros",      num:7,  img:"imagens/ombros.jpg",                    alt:"Ombros deslocados" },
+  { id:"p-peito",       num:8,  img:"imagens/asfixia-tetania-toracica.jpg",  alt:"Tetania e asfixia" },
+  { id:"p-lancada",     num:9,  img:"imagens/lancada-efusao-pericardica.jpg",alt:"A lançada" },
+  { id:"p-pernas",      num:10, img:"imagens/pernas.jpg",                    alt:"Pernas não quebradas" },
+  { id:"p-pes",         num:11, img:"imagens/pes.jpg",                       alt:"Achado arqueológico" },
 ];
 
 const stage = document.getElementById("dots");
