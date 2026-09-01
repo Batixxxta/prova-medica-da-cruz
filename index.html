@@ -95,10 +95,10 @@
     75%{ transform:scale(2.1); opacity:0; }
     100%{ transform:scale(2.1); opacity:0; }
   }
-  /* balanço bem mais perceptível (pedido dele) */
-  @keyframes danceA{0%{transform:translate(0,0)}25%{transform:translate(16px,-19px)}50%{transform:translate(-10px,13px)}75%{transform:translate(-17px,-9px)}100%{transform:translate(0,0)}}
-  @keyframes danceB{0%{transform:translate(0,0)}30%{transform:translate(-17px,-13px)}55%{transform:translate(12px,15px)}80%{transform:translate(10px,-17px)}100%{transform:translate(0,0)}}
-  @keyframes danceC{0%{transform:translate(0,0)}20%{transform:translate(12px,17px)}50%{transform:translate(-17px,-8px)}75%{transform:translate(8px,-17px)}100%{transform:translate(0,0)}}
+  /* balanço — reduzido pela metade a pedido dele (01/09/2026) */
+  @keyframes danceA{0%{transform:translate(0,0)}25%{transform:translate(8px,-10px)}50%{transform:translate(-5px,7px)}75%{transform:translate(-9px,-5px)}100%{transform:translate(0,0)}}
+  @keyframes danceB{0%{transform:translate(0,0)}30%{transform:translate(-9px,-7px)}55%{transform:translate(6px,8px)}80%{transform:translate(5px,-9px)}100%{transform:translate(0,0)}}
+  @keyframes danceC{0%{transform:translate(0,0)}20%{transform:translate(6px,9px)}50%{transform:translate(-9px,-4px)}75%{transform:translate(4px,-9px)}100%{transform:translate(0,0)}}
 
   #p-rosto{ --top:24%; --left:49%; --dance:danceA; --dance-dur:5.2s; --dance-delay:.1s; }
   #p-costas{ --top:32%; --left:34%; --dance:danceB; --dance-dur:4.7s; --dance-delay:.9s; }
@@ -330,6 +330,7 @@ function applyImgTransform(){
 }
 function resetZoomImg(){
   scale = 1; panX = 0; panY = 0;
+  viewerImg.style.transformOrigin = "50% 50%";
   applyImgTransform();
 }
 function dist(a, b){ return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY); }
@@ -338,6 +339,13 @@ viewerImg.addEventListener("touchstart", e => {
   if(e.touches.length === 2){
     startDist = dist(e.touches[0], e.touches[1]);
     startScale = scale;
+    // ancora o zoom no ponto exato da pinça, não no centro da imagem
+    const rect = viewerImg.getBoundingClientRect();
+    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    const originX = Math.min(100, Math.max(0, ((midX - rect.left) / rect.width) * 100));
+    const originY = Math.min(100, Math.max(0, ((midY - rect.top) / rect.height) * 100));
+    viewerImg.style.transformOrigin = originX + "% " + originY + "%";
   } else if(e.touches.length === 1 && scale > 1){
     startTouchX = e.touches[0].clientX - panX;
     startTouchY = e.touches[0].clientY - panY;
