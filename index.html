@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>A Prova Médica da Cruz</title>
+<style>
+  :root{
+    --bg:#0b0908;
+    --bg2:#171210;
+    --card:#1c1613;
+    --ink:#f3ece2;
+    --sub:#b9a99450;
+    --sub2:#a6968720;
+    --line:#3a2e26;
+    --gold:#d8ab5c;
+    --gold-glow:rgba(216,171,92,.55);
+    --blood:#a3273a;
+    --blood-glow:rgba(163,39,58,.6);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; padding:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, rgba(216,171,92,.10), transparent 65%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  header{
+    text-align:center;
+    padding:34px 20px 18px;
+  }
+  header h1{
+    margin:0;
+    font-size:clamp(22px,6vw,30px);
+    font-weight:800;
+    letter-spacing:.01em;
+    color:var(--ink);
+  }
+  header .sub{
+    margin-top:8px;
+    font-size:13.5px;
+    color:#c9bda9;
+    line-height:1.5;
+    max-width:420px;
+    margin-left:auto; margin-right:auto;
+  }
+  header .hint{
+    margin-top:14px;
+    font-size:12px;
+    color:var(--gold);
+    letter-spacing:.03em;
+  }
+  header .hint::before{ content:"✦ "; }
+
+  .stage{
+    position:relative;
+    max-width:460px;
+    margin:10px auto 50px;
+    padding:0 20px;
+  }
+  .stage-inner{
+    position:relative;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.55), 0 0 0 1px var(--line);
+  }
+  .stage-inner img{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+
+  .dot{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    top:var(--top); left:var(--left);
+    width:30px; height:30px;
+    border:none; padding:0; cursor:pointer;
+    background:none;
+  }
+  .dot .ring{
+    position:absolute; inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--gold-glow), transparent 70%);
+    animation:pulseRing 2.2s ease-out infinite;
+  }
+  .dot .core{
+    position:absolute;
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    width:14px; height:14px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 60%, #a5793a);
+    box-shadow:0 0 10px 2px var(--gold-glow), 0 0 0 2px rgba(0,0,0,.35);
+  }
+  @keyframes pulseRing{
+    0%{ transform:scale(.5); opacity:.9; }
+    75%{ transform:scale(2.1); opacity:0; }
+    100%{ transform:scale(2.1); opacity:0; }
+  }
+  .dot:active .core{ transform:translate(-50%,-50%) scale(.85); }
+
+  /* posições estimadas — ajustar depois com feedback visual */
+  #p-rosto{ --top:15%; --left:46%; }
+  #p-ombros{ --top:24%; --left:68%; }
+  #p-punhos{ --top:24%; --left:89%; }
+  #p-costas{ --top:30%; --left:19%; }
+  #p-peito{ --top:33%; --left:47%; }
+  #p-lancada{ --top:37%; --left:60%; }
+  #p-circulacao{ --top:43%; --left:34%; }
+  #p-pernas{ --top:62%; --left:46%; }
+  #p-pes{ --top:82%; --left:47%; }
+
+  @media(prefers-reduced-motion:reduce){
+    .dot .ring{ animation:none; opacity:.5; }
+  }
+
+  /* modal */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(6,4,3,.86);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:flex-end; justify-content:center;
+    z-index:50;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+  .sheet{
+    width:100%; max-width:520px;
+    max-height:88vh;
+    overflow-y:auto;
+    background:linear-gradient(180deg, var(--card), var(--bg2));
+    border-radius:22px 22px 0 0;
+    border-top:1px solid var(--line);
+    box-shadow:0 -20px 60px rgba(0,0,0,.6);
+    transform:translateY(24px);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    padding-bottom:env(safe-area-inset-bottom, 0);
+  }
+  .overlay.show .sheet{ transform:translateY(0); }
+  @media(min-width:560px){
+    .overlay{ align-items:center; }
+    .sheet{ border-radius:22px; max-height:82vh; }
+  }
+
+  .sheet-close{
+    position:sticky; top:0; z-index:2;
+    display:flex; justify-content:flex-end;
+    padding:14px 14px 0;
+    background:linear-gradient(180deg, var(--card) 60%, transparent);
+  }
+  .sheet-close button{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.35);
+    color:var(--ink);
+    font-size:18px; line-height:1;
+    cursor:pointer;
+  }
+  .sheet-img{
+    width:100%; display:block;
+    margin-top:-30px;
+  }
+  .sheet-body{ padding:6px 24px 28px; }
+  .sheet-eyebrow{
+    font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--gold);
+  }
+  .sheet-body h2{
+    margin:6px 0 14px;
+    font-size:21px; font-weight:800;
+    color:var(--ink);
+    line-height:1.25;
+  }
+  .sheet-body p{
+    font-size:14.5px; line-height:1.65;
+    color:#dcd2c3;
+    margin:0 0 14px;
+  }
+  .sheet-body blockquote{
+    margin:0 0 16px;
+    padding:12px 16px;
+    border-left:3px solid var(--blood);
+    background:rgba(163,39,58,.08);
+    border-radius:0 10px 10px 0;
+    font-style:italic;
+    font-size:14px;
+    color:#f0e2d6;
+    line-height:1.6;
+  }
+
+  footer{
+    text-align:center;
+    padding:0 20px 40px;
+    font-size:11.5px;
+    color:#7a6c5c;
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>A Prova Médica da Cruz</h1>
+  <p class="sub">A morte de Jesus, ponto por ponto, com os olhos da medicina.</p>
+  <p class="hint">toque nos pontos dourados no corpo</p>
+</header>
+
+<div class="stage">
+  <div class="stage-inner">
+    <img src="imagens/hero-crucificacao.jpg" alt="Representação da crucificação">
+    <div id="dots"></div>
+  </div>
+</div>
+
+<footer>
+  Baseado em Pierre Barbet, "Em Defesa de Cristo" (Lee Strobel) e no artigo<br>
+  do JAMA (1986) sobre a fisiologia da crucificação romana.
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheet-close"><button id="closeBtn" aria-label="Fechar">✕</button></div>
+    <img class="sheet-img" id="sheetImg" src="" alt="">
+    <div class="sheet-body">
+      <div class="sheet-eyebrow" id="sheetEyebrow"></div>
+      <h2 id="sheetTitle"></h2>
+      <div id="sheetText"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const pontos = [
+  {
+    id: "p-rosto",
+    img: "imagens/rosto-hematidrose.jpg",
+    eyebrow: "Getsêmani",
+    title: "O suor que virou sangue",
+    html: `
+      <blockquote>"Jesus entrou em agonia no Getsêmani e seu suor tornou-se como gotas de sangue a escorrer pela terra."</blockquote>
+      <p>O nome técnico é <strong>hematidrose</strong>: um fenômeno raríssimo, que só acontece sob um abatimento moral violento — um terror imenso. A tensão extrema rompe as finíssimas veias capilares sob a pele, e o sangue se mistura ao suor.</p>
+      <p>Na prática: a pele inteira de Jesus já estava fragilizada, cheia de microlesões invisíveis, <strong>antes mesmo do primeiro golpe do açoite</strong>. Ele não começa a via-crucis saudável — começa dilacerado por dentro.</p>
+    `
+  },
+  {
+    id: "p-costas",
+    img: "imagens/acoite-costas.jpg",
+    eyebrow: "A flagelação romana",
+    title: "O chicote que já encontra ferida aberta",
+    html: `
+      <blockquote>"Golpeiam com chibatadas a pele já alterada por milhões de microscópicas hemorragias do suor de sangue. A pele se dilacera e se rompe, o sangue espirra a cada golpe."</blockquote>
+      <p>O instrumento era o <strong>flagrum</strong> romano: tiras de couro com pedaços de metal ou osso afiado, feito pra rasgar, não só machucar. Registros do período descrevem vítimas com veias, músculos e até órgãos internos expostos — havia condenado que morria só nessa fase.</p>
+      <p>Tradicionalmente eram 39 golpes. O resultado: perda de sangue maciça, muito antes de a cruz sequer entrar em cena.</p>
+    `
+  },
+  {
+    id: "p-ombros",
+    img: "imagens/ombros.jpg",
+    eyebrow: "Suspenso na cruz",
+    title: "Ombros arrancados do lugar",
+    html: `
+      <p>No instante em que o corpo é erguido, o peso total passa a puxar os braços pra cima e pros lados. Os ombros se deslocam quase imediatamente — as juntas se distendem cerca de <strong>15 centímetros</strong> além do normal.</p>
+      <blockquote>"Todos os meus ossos estão desconjuntados." — Salmo 22, escrito quase mil anos antes de a crucificação existir como método de execução.</blockquote>
+      <p>Não é só dor a mais. É o cumprimento literal de uma profecia impossível de forjar depois dos fatos.</p>
+    `
+  },
+  {
+    id: "p-punhos",
+    img: "imagens/punhos.jpg",
+    eyebrow: "Os pregos",
+    title: "Onde nasceu a palavra \"excruciante\"",
+    html: `
+      <p>Por que o pulso, e não a palma da mão? A palma sozinha é só tecido mole — rasgaria com o peso do corpo pendurado. O pulso tem estrutura óssea pra sustentar. E é exatamente ali que passa o <strong>nervo mediano</strong>, o maior nervo da mão.</p>
+      <blockquote>"O nervo mediano foi lesado. Uma dor lancinante, agudíssima, difundiu-se pelos dedos, espalhou-se pelos ombros, atingindo o cérebro. A dor mais insuportável que um homem pode provar."</blockquote>
+      <p>O nervo não é destruído por completo — fica em contato com o prego, e a cada movimento na cruz, <strong>vibra</strong> como uma corda esticada. É desse sofrimento específico que nasceu a palavra "excruciante": do latim <em>excruciatus</em>, "vindo da cruz".</p>
+    `
+  },
+  {
+    id: "p-peito",
+    img: "imagens/asfixia-tetania-toracica.jpg",
+    eyebrow: "O mecanismo da morte",
+    title: "Preso na hora de respirar",
+    html: `
+      <blockquote>"Os braços esticados e levantados, os dedos se curvando — isto é o que os médicos chamam de tetania."</blockquote>
+      <p>A tetania é uma contração muscular involuntária que avança em ondas: abdômen, costelas, pescoço, e por fim os músculos respiratórios. Pendurado pelos braços, o peso do corpo deixa o peito preso na posição de <strong>inspirar</strong> — o ar entra, mas não consegue mais sair.</p>
+      <p>A única saída é mecânica: empurrar o corpo pra cima, apoiado no prego do pé, só pra conseguir esvaziar os pulmões. E repetir. De novo. Por horas.</p>
+    `
+  },
+  {
+    id: "p-circulacao",
+    img: "imagens/choque-hipovolemico.jpg",
+    eyebrow: "Choque hipovolêmico",
+    title: "O corpo começando a desligar",
+    html: `
+      <p>Depois do Getsêmani, do açoite e da coroa de espinhos, Jesus já havia perdido uma quantidade de sangue que nenhum corpo humano suporta sem consequência. Quatro efeitos se instalam ao mesmo tempo:</p>
+      <p>1. O coração bate mais rápido e mais fraco, sem volume pra bombear.<br>
+      2. A pressão arterial despenca — tontura, quase-desmaio.<br>
+      3. Os rins começam a falhar, tentando preservar líquido.<br>
+      4. Uma sede insuportável.</p>
+      <p>É esse choque, e não simples cansaço, que explica por que Jesus não conseguiu carregar sozinho a cruz — e a frase seca: "tenho sede."</p>
+    `
+  },
+  {
+    id: "p-lancada",
+    img: "imagens/lancada-efusao-pericardica.jpg",
+    eyebrow: "A confirmação que ninguém esperava",
+    title: "Sangue e água",
+    html: `
+      <p>O choque hipovolêmico já vinha levando o coração à falência — o que provoca acúmulo de líquido ao redor do coração e dos pulmões. Quando a lança do soldado atinge o tórax, sai primeiro um líquido claro, e só depois, sangue de verdade.</p>
+      <blockquote>"E logo saiu sangue e água." — João 19:34</blockquote>
+      <p>João não tinha formação médica — só registrou o que viu. Dezenove séculos depois, a medicina confirma que é exatamente esse o padrão de um corpo já morto, em falência cardíaca terminal. Em 1986, o JAMA publicou: "o peso das evidências históricas e médicas indica que Jesus estava morto antes do ferimento no lado."</p>
+    `
+  },
+  {
+    id: "p-pernas",
+    img: "imagens/pernas.jpg",
+    eyebrow: "Pernas não quebradas",
+    title: "A profecia nos ossos",
+    html: `
+      <p>Era prática romana comum quebrar as pernas dos crucificados pra acelerar a morte — sem apoio dos pés, a vítima não consegue mais se erguer pra respirar, e morre em minutos. Foi o que fizeram com os dois ladrões ao lado de Jesus.</p>
+      <p>Com ele, não. Os soldados chegaram, verificaram, e constataram que já estava morto — a lançada só confirmou o óbvio. Cumpre-se, sem que ninguém tivesse planejado, outra profecia: <strong>nenhum de seus ossos seria quebrado</strong>.</p>
+    `
+  },
+  {
+    id: "p-pes",
+    img: "imagens/pes.jpg",
+    eyebrow: "Achado arqueológico — Jerusalém, 1968",
+    title: "O prego que a arqueologia encontrou",
+    html: `
+      <p>O relato médico diz que o prego era cravado no calcâneo (osso do calcanhar) e entre os ossos do tornozelo, pra sustentar o peso do corpo. Por décadas, parte da academia questionou se os romanos realmente usavam pregos, ou apenas cordas.</p>
+      <blockquote>Em 1968, arqueólogos encontraram em Jerusalém o esqueleto de Yohanan, um judeu crucificado por volta do ano 70 d.C. — ainda preso ao osso do calcanhar, um prego de 17 centímetros, dobrado na ponta.</blockquote>
+      <p>A resposta ao debate acadêmico estava literalmente cravada no osso.</p>
+    `
+  },
+];
+
+const stage = document.getElementById("dots");
+pontos.forEach(p => {
+  const btn = document.createElement("button");
+  btn.className = "dot";
+  btn.id = p.id;
+  btn.innerHTML = `<span class="ring"></span><span class="core"></span>`;
+  btn.addEventListener("click", () => abrir(p));
+  stage.appendChild(btn);
+});
+
+const overlay = document.getElementById("overlay");
+const sheetImg = document.getElementById("sheetImg");
+const sheetEyebrow = document.getElementById("sheetEyebrow");
+const sheetTitle = document.getElementById("sheetTitle");
+const sheetText = document.getElementById("sheetText");
+
+function abrir(p){
+  sheetImg.src = p.img;
+  sheetImg.alt = p.title;
+  sheetEyebrow.textContent = p.eyebrow;
+  sheetTitle.textContent = p.title;
+  sheetText.innerHTML = p.html;
+  overlay.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function fechar(){
+  overlay.classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("closeBtn").addEventListener("click", fechar);
+overlay.addEventListener("click", e => { if(e.target === overlay) fechar(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
+</script>
+
+</body>
+</html>
