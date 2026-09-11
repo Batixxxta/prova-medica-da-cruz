@@ -82,13 +82,20 @@
     opacity:.55;
   }
   .dot .core{
-    position:relative;
+    position:relative; z-index:0;
     width:15px; height:15px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:8px; color:#3a2410;
+    text-shadow:0 0 2px rgba(255,243,216,.9);
+  }
+  /* a bolinha continua 60% transparente; só o NÚMERO ficou sólido,
+     pra ler melhor (pedido dele, 10/09/2026) */
+  .dot .core::before{
+    content:""; position:absolute; inset:0; z-index:-1;
     border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 55%, #9c7038);
     box-shadow:0 0 6px 1px var(--gold-glow), 0 0 0 1.5px rgba(0,0,0,.35);
-    display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:8px; color:#3a2410;
     opacity:.6;
   }
   @keyframes pulseRing{
@@ -276,8 +283,8 @@ const pontos = [
   { id:"p-punhos",      num:6,  img:"imagens/punhos.jpg",                    alt:"Os pregos e o nervo mediano" },
   { id:"p-ombros",      num:7,  img:"imagens/ombros.jpg",                    alt:"Ombros deslocados" },
   { id:"p-peito",       num:8,  img:"imagens/asfixia-tetania-toracica.jpg",  alt:"Tetania e asfixia" },
-  { id:"p-lancada",     num:9,  img:"imagens/lancada-efusao-pericardica.jpg",alt:"A lançada" },
-  { id:"p-pernas",      num:10, img:"imagens/pernas.jpg",                    alt:"Pernas não quebradas" },
+  { id:"p-lancada",     num:10, img:"imagens/lancada-efusao-pericardica.jpg",alt:"A lançada" },  /* 9 e 10 trocados a pedido dele (10/09/2026) */
+  { id:"p-pernas",      num:9,  img:"imagens/pernas.jpg",                    alt:"Pernas não quebradas" },
   { id:"p-pes",         num:11, img:"imagens/pes.jpg",                       alt:"Achado arqueológico" },
 ];
 
