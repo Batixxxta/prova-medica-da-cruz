@@ -60,7 +60,7 @@
     position:absolute;
     transform:translate(-50%,-50%);
     top:var(--top); left:var(--left);
-    width:34px; height:34px;
+    width:46px; height:46px;
     border:none; padding:0; cursor:pointer;
     background:none;
     z-index:5;
@@ -69,25 +69,32 @@
   .dot .float{
     position:relative;
     display:flex; align-items:center; justify-content:center;
-    width:15px; height:15px;
+    width:20px; height:20px;
     animation:var(--dance) var(--dance-dur,5s) ease-in-out infinite;
     animation-delay:var(--dance-delay,0s);
   }
   .dot .ring{
-    position:absolute; inset:-3px;
+    position:absolute; inset:-4px;
     border-radius:50%;
     background:radial-gradient(circle, var(--gold-glow), transparent 70%);
     animation:pulseRing 2.4s ease-out infinite;
     animation-delay:var(--dance-delay,0s);
     opacity:.55;
   }
+  /* Tamanho definido por ele em 13/09/2026: 1,35x sobre as 15px originais = 20px.
+     Histórico: ele pediu 6x (90px), testei e NÃO cabe — os pontos mais próximos
+     do corpo (rosto/coroa, peito/circulação) ficam a ~31px de distância num
+     celular de 390px, então acima disso as bolinhas se sobrepõem e escondem a
+     imagem. O que resolve de verdade o "não consigo acertar o clique" é a ÁREA
+     DE TOQUE (.dot, 46px), bem maior que o círculo visível: o dedo acerta sem
+     precisar mirar e sem precisar dar zoom na tela. */
   .dot .core{
     position:relative; z-index:0;
-    width:15px; height:15px;
+    width:20px; height:20px;
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:8px; color:#3a2410;
-    text-shadow:0 0 2px rgba(255,243,216,.9);
+    font-weight:800; font-size:11px; color:#3a2410;
+    text-shadow:0 0 3px rgba(255,243,216,.9);
   }
   /* a bolinha continua 60% transparente; só o NÚMERO ficou sólido,
      pra ler melhor (pedido dele, 10/09/2026) */
@@ -95,7 +102,7 @@
     content:""; position:absolute; inset:0; z-index:-1;
     border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 55%, #9c7038);
-    box-shadow:0 0 6px 1px var(--gold-glow), 0 0 0 1.5px rgba(0,0,0,.35);
+    box-shadow:0 0 8px 1.5px var(--gold-glow), 0 0 0 2px rgba(0,0,0,.35);
     opacity:.6;
   }
   @keyframes pulseRing{
@@ -329,8 +336,33 @@ function fechar(){
   document.body.style.overflow = "";
 }
 viewerClose.addEventListener("click", fechar);
-viewer.addEventListener("click", e => { if(e.target === viewer) fechar(); });
+
+/* CORREÇÃO 13/09/2026 — a tela travava depois de dar zoom e clicar numa bolinha.
+   Causa: aqui só fechava se o toque caísse exatamente no #viewer, mas .viewer-zoom
+   cobre a tela inteira, então o alvo nunca era o #viewer — tocar no fundo não
+   fazia nada. Sobrava só o ✕, que é position:fixed e sai da área visível quando
+   a página está ampliada pela pinça. Sem saída no fundo e sem ✕ na tela, a pessoa
+   ficava presa. Agora fecha tocando em QUALQUER lugar que não seja a imagem. */
+viewer.addEventListener("click", e => { if(e.target !== viewerImg) fechar(); });
 document.addEventListener("keydown", e => { if(e.key === "Escape") fechar(); });
+
+/* mantém o ✕ sempre dentro do pedaço que está REALMENTE visível na tela,
+   mesmo com a página ampliada pela pinça (elemento fixed se posiciona pela
+   viewport de layout, não pela visual — por isso sumia) */
+function reposicionarFechar(){
+  const vv = window.visualViewport;
+  if(!vv) return;
+  const s = vv.scale || 1;
+  viewerClose.style.right = "auto";
+  viewerClose.style.left = (vv.offsetLeft + vv.width - 14 - 52/s) + "px";
+  viewerClose.style.top  = (vv.offsetTop + 14) + "px";
+  viewerClose.style.transform = "scale(" + (1/s) + ")";
+  viewerClose.style.transformOrigin = "top left";
+}
+if(window.visualViewport){
+  visualViewport.addEventListener("resize", reposicionarFechar);
+  visualViewport.addEventListener("scroll", reposicionarFechar);
+}
 
 // pinça pra dar zoom + arrastar quando ampliado + duplo toque reseta
 let scale = 1, panX = 0, panY = 0;
