@@ -69,32 +69,35 @@
   .dot .float{
     position:relative;
     display:flex; align-items:center; justify-content:center;
-    width:20px; height:20px;
+    width:25px; height:25px;
     animation:var(--dance) var(--dance-dur,5s) ease-in-out infinite;
     animation-delay:var(--dance-delay,0s);
   }
   .dot .ring{
-    position:absolute; inset:-4px;
+    position:absolute; inset:-5px;
     border-radius:50%;
     background:radial-gradient(circle, var(--gold-glow), transparent 70%);
     animation:pulseRing 2.4s ease-out infinite;
     animation-delay:var(--dance-delay,0s);
     opacity:.55;
   }
-  /* Tamanho definido por ele em 13/09/2026: 1,35x sobre as 15px originais = 20px.
+  /* Tamanho: 15px (original) -> 20px (1,35x) -> 25px (mais 1,25x, pedido dele em
+     13/09/2026, junto com "número mais nítido, um preto mais forte").
      Histórico: ele pediu 6x (90px), testei e NÃO cabe — os pontos mais próximos
      do corpo (rosto/coroa, peito/circulação) ficam a ~31px de distância num
      celular de 390px, então acima disso as bolinhas se sobrepõem e escondem a
-     imagem. O que resolve de verdade o "não consigo acertar o clique" é a ÁREA
-     DE TOQUE (.dot, 46px), bem maior que o círculo visível: o dedo acerta sem
-     precisar mirar e sem precisar dar zoom na tela. */
+     imagem. 25px ainda passa com folga desse limite. O que resolve de verdade o
+     "não consigo acertar o clique" é a ÁREA DE TOQUE (.dot, 46px), bem maior que
+     o círculo visível: o dedo acerta sem mirar e sem dar zoom na tela.
+     Número: era #3a2410 (marrom) com halo claro largo — o halo embaçava em vez de
+     destacar. Agora é quase preto com halo curto, pra ficar nítido de longe. */
   .dot .core{
     position:relative; z-index:0;
-    width:20px; height:20px;
+    width:25px; height:25px;
     border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size:11px; color:#3a2410;
-    text-shadow:0 0 3px rgba(255,243,216,.9);
+    font-weight:800; font-size:14px; color:#140a02;
+    text-shadow:0 0 2px rgba(255,246,225,.75);
   }
   /* a bolinha continua 60% transparente; só o NÚMERO ficou sólido,
      pra ler melhor (pedido dele, 10/09/2026) */
@@ -102,7 +105,7 @@
     content:""; position:absolute; inset:0; z-index:-1;
     border-radius:50%;
     background:radial-gradient(circle at 35% 30%, #fff3d8, var(--gold) 55%, #9c7038);
-    box-shadow:0 0 8px 1.5px var(--gold-glow), 0 0 0 2px rgba(0,0,0,.35);
+    box-shadow:0 0 10px 2px var(--gold-glow), 0 0 0 2px rgba(0,0,0,.45);
     opacity:.6;
   }
   @keyframes pulseRing{
