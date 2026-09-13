@@ -118,7 +118,7 @@
   @keyframes danceB{0%{transform:translate(0,0)}30%{transform:translate(-9px,-7px)}55%{transform:translate(6px,8px)}80%{transform:translate(5px,-9px)}100%{transform:translate(0,0)}}
   @keyframes danceC{0%{transform:translate(0,0)}20%{transform:translate(6px,9px)}50%{transform:translate(-9px,-4px)}75%{transform:translate(4px,-9px)}100%{transform:translate(0,0)}}
 
-  #p-rosto{ --top:24%; --left:50.5%; --dance:danceA; --dance-dur:5.2s; --dance-delay:.1s; }
+  #p-rosto{ --top:23%; --left:51%; --dance:danceA; --dance-dur:5.2s; --dance-delay:.1s; }
   #p-costas{ --top:32%; --left:34%; --dance:danceB; --dance-dur:4.7s; --dance-delay:.9s; }
   /* ⚠️ ATENÇÃO ao mexer nestas porcentagens — medido em 13/09/2026:
      o `.frame` NÃO tem o tamanho da imagem. Ele fica 765x1688 (altura da tela),
@@ -131,10 +131,12 @@
      Corrigir isso de verdade = ajustar o .frame e recalibrar as 11. NÃO FEITO.
 
      Coroa e rosto são empilhados por natureza (coroa NA cabeça, face logo
-     abaixo). Tentei subir a coroa a 17% e a 19% e nas duas ela saiu pra madeira
-     da cruz. Então a separação pedida por ele foi feita na HORIZONTAL, mantendo
-     as ALTURAS que ele já aprovou em 01/09 (20% e 24%). */
-  #p-coroa{ --top:20%; --left:41%; --dance:danceC; --dance-dur:5.3s; --dance-delay:2.4s; }
+     abaixo), então subir a coroa a tira do corpo e a joga na madeira da cruz.
+     Mostrei isso a ele com print e ele DECIDIU assim mesmo, com estas palavras:
+     "pode publicar, mesmo saindo um pouco do corpo" (13/09/2026). Decisão dele,
+     consciente do efeito — não mexer de volta sem falar com ele.
+     A separação horizontal foi mantida porque só ajuda. */
+  #p-coroa{ --top:18%; --left:41%; --dance:danceC; --dance-dur:5.3s; --dance-delay:2.4s; }
   #p-circulacao{ --top:39%; --left:44%; --dance:danceC; --dance-dur:5.6s; --dance-delay:.3s; }
   #p-caminho{ --top:23%; --left:22%; --dance:danceA; --dance-dur:5.9s; --dance-delay:2.7s; }
   #p-punhos{ --top:23%; --left:90%; --dance:danceA; --dance-dur:4.9s; --dance-delay:1.4s; }
